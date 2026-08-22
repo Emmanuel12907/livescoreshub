@@ -176,7 +176,10 @@
   </div>
 
   <main class="container">
-
+<div id="publicAdBanner" style="display:none; margin:15px; padding:15px; background:#151d26; border:1px solid #ffb020; border-radius:8px; text-align:center;">
+  <p id="publicAdText" style="color:white; font-weight:bold; margin-bottom:8px;"></p>
+  <a id="publicAdLink" href="#" target="_blank" style="color:#ffb020; text-decoration:underline;">Check it out →</a>
+</div>
     <h2 class="section-title">🔴 Live Matches</h2>
 
     <div class="matches">
@@ -320,7 +323,15 @@ showAdminDashboard();
       document.getElementById("adBannerText").value = snap.data().text || "";
       document.getElementById("adBannerLink").value = snap.data().link || "";
     }
+  }async function loadPublicAd() {
+    const snap = await getDoc(doc(db, "settings", "ad"));
+    if (snap.exists() && snap.data().text) {
+      document.getElementById("publicAdText").textContent = snap.data().text;
+      document.getElementById("publicAdLink").href = snap.data().link || "#";
+      document.getElementById("publicAdBanner").style.display = "block";
+    }
   }
+  loadPublicAd();
 
   document.getElementById("saveAdBtn").addEventListener("click", async () => {
     const text = document.getElementById("adBannerText").value;
