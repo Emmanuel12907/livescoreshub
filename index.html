@@ -331,7 +331,42 @@ showAdminDashboard();
       document.getElementById("publicAdBanner").style.display = "block";
     }
   }
-  loadPublicAd();
+  loadPublicAd();async function loadRealMatches() {
+    const today = new Date().toISOString().split("T")[0];
+    const res = await fetch(`https://www.thesportsdb.com/api/v1/json/123/eventsday.php?d=${today}&s=Soccer`);
+    const data = await res.json();
+    const events = data.events || [];
+
+    const liveBox = document.getElementById("liveMatchesContainer");
+    const todayBox = document.getElementById("todayMatchesContainer");
+    liveBox.innerHTML = "";
+    todayBox.innerHTML = "";
+
+    events.forEach(ev => {
+      const isLive = ["1H","2H","HT","ET"].includes((ev.strStatus||"").trim());
+      const homeScore = ev.intHomeScore ?? "-";
+      const awayScore = ev.intAwayScore ?? "-";
+
+      const card = document.createElement("div");
+      card.className = "match";
+      card.innerHTML = `
+        <div class="league">${ev.strLeague}</div>
+        <div class="teams">
+          <div class="team">${ev.strHomeTeam}</div>
+          <div class="score">${homeScore} - ${awayScore}</div>
+          <div class="team">${ev.strAwayTeam}</div>
+        </div>
+        ${isLive ? `<div class="live">• LIVE ${ev.strProgress || ''}</div>` : `<div class="live" style="color:#9aa7b4;">${ev.strTime ? ev.strTime.slice(0,5) : ev.strStatus}</div>`}
+      `;
+
+      if (isLive) liveBox.appendChild(card);
+      else todayBox.appendChild(card);
+    });
+
+    if (!liveBox.children.length) liveBox.innerHTML = `<p style="color:#9aa7b4; font-size:13px;">No live matches right now.</p>`;
+  }
+  loadRealMatches();
+  setInterval(loadRealMatches, 60000);
 
   document.getElementById("saveAdBtn").addEventListener("click", async () => {
     const text = document.getElementById("adBannerText").value;
