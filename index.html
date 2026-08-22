@@ -146,7 +146,12 @@
 </head>
 
 <body>
-
+<div id="adminLoginBox" style="display:none; padding:15px; background:#151d26; border:1px solid #26313d; border-radius:8px; margin:15px;">
+  <input type="email" id="adminEmail" placeholder="Admin email" style="width:100%; padding:10px; margin-bottom:8px; background:#0b0f14; color:white; border:1px solid #303b47; border-radius:6px;">
+  <input type="password" id="adminPass" placeholder="Password" style="width:100%; padding:10px; margin-bottom:8px; background:#0b0f14; color:white; border:1px solid #303b47; border-radius:6px;">
+  <button id="adminLoginSubmit" style="width:100%; padding:10px; background:#ff3b30; color:white; border:none; border-radius:6px;">Log In</button>
+  <p id="adminLoginMsg" style="color:#ff3b30; font-size:12px; margin-top:8px;"></p>
+</div>
   <header>
     <h1>⚽ LiveScoresHub</h1>
     <p>Live football scores, fixtures & match information</p>
@@ -236,6 +241,57 @@
   <footer>
     © 2026 LiveScoresHub • Football scores & match information
   </footer>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
+  const firebaseConfig = {
+    apiKey: "AIzaSyDsNoA1inC0knIodgNxgsLYSnBrUgdN57c",
+    authDomain: "livescoreshubs.firebaseapp.com",
+    projectId: "livescoreshubs",
+    storageBucket: "livescoreshubs.firebasestorage.app",
+    messagingSenderId: "1025690485881",
+    appId: "1:1025690485881:web:e618d15af5e6e9168d00a8"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  window.firebaseApp = app;
+  window.firebaseAuth = auth;
+  window.firebaseDb = db;import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+  const ADMIN_EMAIL = "chinechereme804@gmail.com"; // change this to YOUR real email
+
+  let tapCount = 0;
+  document.querySelector("header h1").addEventListener("click", () => {
+    tapCount++;
+    setTimeout(() => { tapCount = 0; }, 3000);
+    if (tapCount >= 5) {
+      document.getElementById("adminLoginBox").style.display = "block";
+      tapCount = 0;
+    }
+  });
+
+  document.getElementById("adminLoginSubmit").addEventListener("click", async () => {
+    const email = document.getElementById("adminEmail").value;
+    const pass = document.getElementById("adminPass").value;
+    const msg = document.getElementById("adminLoginMsg");
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, pass);
+      if (result.user.email === ADMIN_EMAIL) {
+        msg.style.color = "#34d399";
+        msg.textContent = "Logged in as admin.";
+        window.isAdmin = true;
+      } else {
+        msg.textContent = "This account isn't the admin account.";
+      }
+    } catch (e) {
+      msg.textContent = e.message;
+    }
+  });
+</script>
 </body>
   </html>
