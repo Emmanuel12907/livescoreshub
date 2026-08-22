@@ -356,7 +356,7 @@ showAdminDashboard();
           <div class="score">${homeScore} - ${awayScore}</div>
           <div class="team">${ev.strAwayTeam}</div>
         </div>
-        ${isLive ? `<div class="live">• LIVE ${ev.strProgress || ''}</div>` : `<div class="live" style="color:#9aa7b4;">${ev.strTime ? ev.strTime.slice(0,5) : ev.strStatus}</div>`}
+        ${isLive ? `<div class="live">• LIVE ${ev.strProgress || ''}</div>` : `<div class="live" style="color:#9aa7b4;">${ev.strTime ? new Date(ev.dateEvent + 'T' + ev.strTime + 'Z').toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : ev.strStatus}</div>`}
       `;
 
       if (isLive) liveBox.appendChild(card);
