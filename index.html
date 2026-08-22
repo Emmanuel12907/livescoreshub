@@ -145,7 +145,15 @@
   </style>
 </head>
 
-<body>
+<body><div id="welcomeScreen" style="display:none; position:fixed; inset:0; background:#0b0f14; z-index:200; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:30px; text-align:center;">
+  <div style="font-size:60px; margin-bottom:30px;">⚽</div>
+  <h1 style="color:white; font-size:28px; margin-bottom:12px;">Welcome to LiveScoresHub</h1>
+  <p style="color:#9aa7b4; font-size:15px; margin-bottom:50px; max-width:300px;">Live scores, fixtures & match information for every league.</p>
+
+  <button id="welcomeGetStartedBtn" style="width:100%; max-width:320px; padding:14px; background:white; color:#0b0f14; border:none; border-radius:10px; font-weight:bold; font-size:15px; margin-bottom:12px;">Get Started</button>
+
+  <button id="welcomeSignInBtn" style="width:100%; max-width:320px; padding:14px; background:#26313d; color:white; border:none; border-radius:10px; font-size:15px; display:flex; justify-content:center; align-items:center; gap:8px;">Have an account? <span style="color:#ffb020;">Sign In →</span></button>
+</div>
 <div id="adminLoginBox" style="display:none; padding:15px; background:#151d26; border:1px solid #26313d; border-radius:8px; margin:15px;">
   <input type="email" id="adminEmail" placeholder="Admin email" style="width:100%; padding:10px; margin-bottom:8px; background:#0b0f14; color:white; border:1px solid #303b47; border-radius:6px;">
   <input type="password" id="adminPass" placeholder="Password" style="width:100%; padding:10px; margin-bottom:8px; background:#0b0f14; color:white; border:1px solid #303b47; border-radius:6px;">
