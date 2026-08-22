@@ -170,7 +170,34 @@
     <h1>⚽ LiveScoresHub</h1>
     <p>Live football scores, fixtures & match information</p>
   </header>
+<button id="settingsGearBtn" style="position:fixed; top:15px; right:15px; z-index:50; background:#151d26; border:1px solid #303b47; color:#ffb020; width:38px; height:38px; border-radius:50%; font-size:16px;">⚙</button>
 
+<div id="settingsOverlay" style="display:none; position:fixed; inset:0; background:#0b0f14; z-index:100; overflow-y:auto;">
+  <div style="padding:18px; border-bottom:1px solid #26313d; display:flex; align-items:center; gap:12px;">
+    <button id="settingsCloseBtn" style="background:none; border:none; color:white; font-size:20px;">←</button>
+    <h2 style="font-size:18px; color:white;">Settings</h2>
+  </div>
+
+  <div style="padding:18px;">
+    <p style="color:#9aa7b4; font-size:12px; text-transform:uppercase; margin-bottom:10px;">Account</p>
+    <div style="background:#151d26; border:1px solid #26313d; border-radius:10px; padding:15px; margin-bottom:25px; display:flex; justify-content:space-between; align-items:center;">
+      <span id="settingsAccountStatus" style="color:#9aa7b4;">Not logged in</span>
+      <button id="settingsAccountBtn" style="background:#ffb020; color:#14100A; border:none; padding:8px 16px; border-radius:6px; font-weight:bold;">Log In</button>
+    </div>
+
+    <p style="color:#9aa7b4; font-size:12px; text-transform:uppercase; margin-bottom:10px;">Appearance</p>
+    <div style="background:#151d26; border:1px solid #26313d; border-radius:10px; padding:15px; margin-bottom:25px; display:flex; justify-content:space-between; align-items:center;">
+      <span style="color:white;">Dark Mode</span>
+      <input type="checkbox" id="darkModeToggle" checked>
+    </div>
+
+    <p style="color:#9aa7b4; font-size:12px; text-transform:uppercase; margin-bottom:10px;">About</p>
+    <div style="background:#151d26; border:1px solid #26313d; border-radius:10px; padding:15px;">
+      <p style="color:white; font-size:13px; margin-bottom:10px;">LiveScoresHub — Live football scores, fixtures & match information.</p>
+      <p style="color:#9aa7b4; font-size:12px;">Version 1.0</p>
+    </div>
+  </div>
+        </div>
   <div class="search">
     <input type="text" placeholder="🔎 Search teams or competitions...">
   </div>
