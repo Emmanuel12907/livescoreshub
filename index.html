@@ -464,7 +464,21 @@ import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebase
     document.getElementById("settingsOverlay").style.display = "none";
     document.getElementById("userAuthBox").style.display = "block";
   });
+const hasVisited = localStorage.getItem("lsh-visited");
+  if (!hasVisited) {
+    document.getElementById("welcomeScreen").style.display = "flex";
+  }
 
+  document.getElementById("welcomeGetStartedBtn").addEventListener("click", () => {
+    localStorage.setItem("lsh-visited", "true");
+    document.getElementById("welcomeScreen").style.display = "none";
+  });
+
+  document.getElementById("welcomeSignInBtn").addEventListener("click", () => {
+    localStorage.setItem("lsh-visited", "true");
+    document.getElementById("welcomeScreen").style.display = "none";
+    document.getElementById("userAuthBox").style.display = "block";
+  });
   document.getElementById("darkModeToggle").addEventListener("change", (e) => {
     document.body.style.background = e.target.checked ? "#0b0f14" : "#f5f5f5";
     document.body.style.color = e.target.checked ? "#ffffff" : "#111111";
