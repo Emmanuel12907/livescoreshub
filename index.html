@@ -377,7 +377,42 @@ showAdminDashboard();
   }
   loadRealMatches();
   setInterval(loadRealMatches, 60000);
+import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+  import { setDoc as setUserDoc, doc as userDoc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
+  document.getElementById("userAuthBtn").addEventListener("click", () => {
+    const box = document.getElementById("userAuthBox");
+    box.style.display = box.style.display === "none" ? "block" : "none";
+  });
+
+  document.getElementById("userSignupBtn").addEventListener("click", async () => {
+    const email = document.getElementById("userEmail").value;
+    const pass = document.getElementById("userPassword").value;
+    const msg = document.getElementById("userAuthMsg");
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, pass);
+      await setUserDoc(userDoc(db, "users", cred.user.uid), { email, createdAt: new Date().toISOString() });
+      msg.style.color = "#34d399";
+      msg.textContent = "Account created! You're signed in.";
+    } catch (e) {
+      msg.style.color = "#ff3b30";
+      msg.textContent = e.message.replace("Firebase: ", "");
+    }
+  });
+
+  document.getElementById("userLoginBtn").addEventListener("click", async () => {
+    const email = document.getElementById("userEmail").value;
+    const pass = document.getElementById("userPassword").value;
+    const msg = document.getElementById("userAuthMsg");
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      msg.style.color = "#34d399";
+      msg.textContent = "Logged in!";
+    } catch (e) {
+      msg.style.color = "#ff3b30";
+      msg.textContent = e.message.replace("Firebase: ", "");
+    }
+  });
   document.getElementById("saveAdBtn").addEventListener("click", async () => {
     const text = document.getElementById("adBannerText").value;
     const link = document.getElementById("adBannerLink").value;
