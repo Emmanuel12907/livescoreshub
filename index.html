@@ -1,1 +1,1535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EngageHub</title>
 
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #0b0f14;
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #111820;
+      border-bottom: 1px solid #26313d;
+      padding: 15px;
+    }
+
+    .header-inner {
+      max-width: 1050px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .logo span {
+      color: #ffb020;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .header-btn {
+      background: #151d26;
+      color: #fff;
+      border: 1px solid #303b47;
+      padding: 9px 14px;
+      border-radius: 8px;
+    }
+
+    main {
+      max-width: 1050px;
+      margin: auto;
+      padding: 20px 15px 50px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 65px 10px;
+    }
+
+    .hero-icon {
+      font-size: 55px;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 span {
+      color: #ffb020;
+    }
+
+    .hero p {
+      color: #9aa7b4;
+      max-width: 620px;
+      margin: auto;
+      line-height: 1.6;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 25px;
+      flex-wrap: wrap;
+    }
+
+    .primary {
+      background: #ffb020;
+      color: #14100a;
+      border: none;
+      padding: 13px 22px;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .secondary {
+      background: #151d26;
+      color: #fff;
+      border: 1px solid #303b47;
+      padding: 13px 22px;
+      border-radius: 8px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .dashboard {
+      display: none;
+    }
+
+    .welcome {
+      margin: 15px 0 20px;
+    }
+
+    .welcome p {
+      color: #9aa7b4;
+      font-size: 13px;
+      margin-top: 5px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .stat {
+      background: #151d26;
+      border: 1px solid #26313d;
+      border-radius: 10px;
+      padding: 17px;
+    }
+
+    .stat-value {
+      color: #ffb020;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .stat-label {
+      color: #9aa7b4;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .section-title {
+      margin: 27px 0 12px;
+      font-size: 19px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .card {
+      background: #151d26;
+      border: 1px solid #26313d;
+      border-radius: 10px;
+      padding: 18px;
+    }
+
+    .card h3 {
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      color: #9aa7b4;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .action-btn {
+      width: 100%;
+      margin-top: 15px;
+      padding: 11px;
+      background: #303b47;
+      color: white;
+      border: none;
+      border-radius: 7px;
+    }
+
+    .referral-code {
+      margin-top: 12px;
+      padding: 12px;
+      background: #0b0f14;
+      border: 1px solid #303b47;
+      border-radius: 7px;
+      color: #ffb020;
+      font-weight: bold;
+      word-break: break-all;
+    }
+
+    .admin-panel {
+      display: none;
+    }
+
+    .admin-badge {
+      display: inline-block;
+      background: #ffb020;
+      color: #14100a;
+      padding: 5px 9px;
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .admin-stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .admin-menu {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .admin-menu button {
+      background: #151d26;
+      color: white;
+      border: 1px solid #303b47;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: left;
+    }
+
+    .admin-menu button:hover {
+      border-color: #ffb020;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.8);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 420px;
+      background: #151d26;
+      border: 1px solid #303b47;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .close {
+      float: right;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 23px;
+    }
+
+    .input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: #0b0f14;
+      color: white;
+      border: 1px solid #303b47;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .form-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      margin-top: 5px;
+      font-weight: bold;
+    }
+
+    .signup {
+      background: #ffb020;
+      color: #14100a;
+    }
+
+    .login {
+      background: #303b47;
+      color: white;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 12px;
+    }
+
+    footer {
+      text-align: center;
+      border-top: 1px solid #202a34;
+      padding: 25px;
+      color: #687582;
+      font-size: 12px;
+    }
+
+    @media (max-width: 800px) {
+      .stats,
+      .admin-stat-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .admin-menu,
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .hero h1 {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-inner">
+
+    <div class="logo">
+      🚀 <span>Engage</span>Hub
+    </div>
+
+    <button class="header-btn" id="accountBtn">
+      Log In
+    </button>
+
+  </div>
+</header>
+
+
+<main>
+
+  <!-- ================= LANDING ================= -->
+
+  <section id="landingPage">
+
+    <div class="hero">
+
+      <div class="hero-icon">🚀</div>
+
+      <h1>
+        Welcome to <span>EngageHub</span>
+      </h1>
+
+      <p>
+        Complete legitimate campaigns and eligible tasks,
+        earn points, invite friends, and manage your rewards
+        in one place.
+      </p>
+
+      <div class="buttons">
+
+        <button class="primary" id="getStartedBtn">
+          Get Started
+        </button>
+
+        <button class="secondary" id="loginBtn">
+          Log In
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= USER DASHBOARD ================= -->
+
+  <section id="userDashboard" class="dashboard">
+
+    <div class="welcome">
+
+      <h2>User Dashboard</h2>
+
+      <p id="userEmail">
+        Loading account...
+      </p>
+
+    </div>
+
+
+    <div class="stats">
+
+      <div class="stat">
+        <div class="stat-value" id="availablePoints">
+          0
+        </div>
+
+        <div class="stat-label">
+          Available Points
+        </div>
+      </div>
+
+
+      <div class="stat">
+        <div class="stat-value" id="lockedPoints">
+          0
+        </div>
+
+        <div class="stat-label">
+          Locked Points
+        </div>
+      </div>
+
+
+      <div class="stat">
+        <div class="stat-value" id="referralPoints">
+          0
+        </div>
+
+        <div class="stat-label">
+          Referral Points
+        </div>
+      </div>
+
+
+      <div class="stat">
+        <div class="stat-value" id="nairaValue">
+          ₦0
+        </div>
+
+        <div class="stat-label">
+          Available Value
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- POINTS -->
+
+    <h2 class="section-title">
+      💰 Points & Balance
+    </h2>
+
+    <div class="card">
+
+      <h3>Current Point Rate</h3>
+
+      <p>
+        200 points = ₦100.
+      </p>
+
+      <p style="margin-top:8px;">
+        Your points are separated into available
+        and locked balances.
+      </p>
+
+    </div>
+
+
+    <!-- CAMPAIGNS -->
+
+    <h2 class="section-title">
+      🎯 Campaigns
+    </h2>
+
+    <div class="card-grid">
+
+      <div class="card">
+
+        <h3>Create Campaign</h3>
+
+        <p>
+          Minimum campaign budget:
+          <strong>6,000 points (₦3,000)</strong>.
+        </p>
+
+        <button class="action-btn" id="createCampaignBtn">
+          Create Campaign
+        </button>
+
+      </div>
+
+
+      <div class="card">
+
+        <h3>Find Tasks</h3>
+
+        <p>
+          View campaigns and eligible tasks
+          available to you.
+        </p>
+
+        <button class="action-btn">
+          Browse Tasks
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- REFERRALS -->
+
+    <h2 class="section-title">
+      👥 Referral Program
+    </h2>
+
+    <div class="card">
+
+      <h3>Your Referral Code</h3>
+
+      <div class="referral-code" id="referralCode">
+        Loading...
+      </div>
+
+      <p style="margin-top:10px;">
+        Referral reward:
+        <strong>500 points = ₦250</strong>.
+      </p>
+
+      <button class="action-btn" id="copyReferralBtn">
+        Copy Referral Code
+      </button>
+
+    </div>
+
+
+    <!-- WITHDRAWAL -->
+
+    <h2 class="section-title">
+      💳 Withdraw
+    </h2>
+
+    <div class="card">
+
+      <h3>Withdrawal Fee</h3>
+
+      <p>
+        Withdrawals have a 1.5% processing fee.
+      </p>
+
+      <p style="margin-top:8px;">
+        Example:
+        ₦10,000 withdrawal →
+        ₦150 fee →
+        ₦9,850 received.
+      </p>
+
+      <button class="action-btn">
+        Withdrawal System
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= ADMIN PANEL ================= -->
+
+  <section id="adminPanel" class="admin-panel">
+
+    <div class="welcome">
+
+      <span class="admin-badge">
+        ADMIN
+      </span>
+
+      <h2>
+        EngageHub Admin Dashboard
+      </h2>
+
+      <p>
+        Platform management and administration.
+      </p>
+
+    </div>
+
+
+    <!-- ADMIN STATS -->
+
+    <div class="admin-stat-grid">
+
+      <div class="stat">
+
+        <div class="stat-value" id="totalUsers">
+          0
+        </div>
+
+        <div class="stat-label">
+          Total Users
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-value" id="totalCampaigns">
+          0
+        </div>
+
+        <div class="stat-label">
+          Campaigns
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-value" id="pendingWithdrawals">
+          0
+        </div>
+
+        <div class="stat-label">
+          Pending Withdrawals
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-value">
+          1.5%
+        </div>
+
+        <div class="stat-label">
+          Withdrawal Fee
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ADMIN MENU -->
+
+    <h2 class="section-title">
+      ⚙️ Administration
+    </h2>
+
+    <div class="admin-menu">
+
+      <button id="adminUsersBtn">
+        👥<br>
+        <strong>User Management</strong>
+        <br>
+        <small>View and manage users</small>
+      </button>
+
+
+      <button id="adminCampaignsBtn">
+        🎯<br>
+        <strong>Campaign Management</strong>
+        <br>
+        <small>Review campaigns</small>
+      </button>
+
+
+      <button id="adminTasksBtn">
+        📋<br>
+        <strong>Task Management</strong>
+        <br>
+        <small>Manage eligible tasks</small>
+      </button>
+
+
+      <button id="adminWithdrawalsBtn">
+        💳<br>
+        <strong>Withdrawals</strong>
+        <br>
+        <small>Review withdrawal requests</small>
+      </button>
+
+
+      <button id="adminReferralsBtn">
+        🔗<br>
+        <strong>Referrals</strong>
+        <br>
+        <small>Review referral activity</small>
+      </button>
+
+
+      <button id="adminTransactionsBtn">
+        💰<br>
+        <strong>Transactions</strong>
+        <br>
+        <small>View point movements</small>
+      </button>
+
+
+      <button id="adminSettingsBtn">
+        ⚙️<br>
+        <strong>Platform Settings</strong>
+        <br>
+        <small>Manage platform rules</small>
+      </button>
+
+
+      <button id="adminReportsBtn">
+        📊<br>
+        <strong>Reports</strong>
+        <br>
+        <small>Platform statistics</small>
+      </button>
+
+
+      <button id="adminAuditBtn">
+        🔐<br>
+        <strong>Admin Activity</strong>
+        <br>
+        <small>Security and audit log</small>
+      </button>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<footer>
+  © 2026 EngageHub
+</footer>
+
+
+<!-- ================= AUTH MODAL ================= -->
+
+<div class="modal" id="authModal">
+
+  <div class="modal-box">
+
+    <button class="close" id="closeAuth">
+      ×
+    </button>
+
+    <h2>
+      EngageHub Account
+    </h2>
+
+    <br>
+
+    <input
+      class="input"
+      id="emailInput"
+      type="email"
+      placeholder="Email address"
+    >
+
+    <input
+      class="input"
+      id="passwordInput"
+      type="password"
+      placeholder="Password"
+    >
+
+    <input
+      class="input"
+      id="referralInput"
+      type="text"
+      placeholder="Referral code (optional)"
+    >
+
+    <button
+      class="form-btn signup"
+      id="signupBtn"
+    >
+      Create Account
+    </button>
+
+    <button
+      class="form-btn login"
+      id="loginSubmitBtn"
+    >
+      Log In
+    </button>
+
+    <p
+      class="message"
+      id="authMessage"
+    ></p>
+
+  </div>
+
+</div>
+
+
+<script type="module">
+
+  /* =========================================
+     FIREBASE
+  ========================================= */
+
+  import {
+    initializeApp
+  } from
+  "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+  } from
+  "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+  import {
+    getFirestore,
+    doc,
+    setDoc,
+    getDoc
+  } from
+  "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+
+  const firebaseConfig = {
+
+    apiKey:
+      "AIzaSyCImtvrbgEpEYFyzZVaZehE31qtfcm-py4",
+
+    authDomain:
+      "engagehubs-c68a1.firebaseapp.com",
+
+    projectId:
+      "engagehubs-c68a1",
+
+    storageBucket:
+      "engagehubs-c68a1.firebasestorage.app",
+
+    messagingSenderId:
+      "221819821919",
+
+    appId:
+      "1:221819821919:web:a6097205c3173605c4e0ea"
+
+  };
+
+
+  const app =
+    initializeApp(firebaseConfig);
+
+  const auth =
+    getAuth(app);
+
+  const db =
+    getFirestore(app);
+
+
+  /* =========================================
+     ENGAGEHUB RULES
+  ========================================= */
+
+  const POINTS_PER_NAIRA = 2;
+
+  const REFERRAL_POINTS = 500;
+
+  const MIN_CAMPAIGN_POINTS = 6000;
+
+  const WITHDRAWAL_FEE_RATE = 0.015;
+
+
+  /* =========================================
+     ELEMENTS
+  ========================================= */
+
+  const landingPage =
+    document.getElementById("landingPage");
+
+  const userDashboard =
+    document.getElementById("userDashboard");
+
+  const adminPanel =
+    document.getElementById("adminPanel");
+
+  const authModal =
+    document.getElementById("authModal");
+
+  const authMessage =
+    document.getElementById("authMessage");
+
+
+  /* =========================================
+     AUTH MODAL
+  ========================================= */
+
+  function openAuth() {
+
+    authModal.classList.add("show");
+
+  }
+
+
+  function closeAuth() {
+
+    authModal.classList.remove("show");
+
+  }
+
+
+  document
+    .getElementById("getStartedBtn")
+    .addEventListener("click", openAuth);
+
+
+  document
+    .getElementById("loginBtn")
+    .addEventListener("click", openAuth);
+
+
+  document
+    .getElementById("closeAuth")
+    .addEventListener("click", closeAuth);
+
+
+  /* =========================================
+     CREATE ACCOUNT
+  ========================================= */
+
+  document
+    .getElementById("signupBtn")
+    .addEventListener("click", async () => {
+
+      const email =
+        document
+          .getElementById("emailInput")
+          .value
+          .trim();
+
+      const password =
+        document
+          .getElementById("passwordInput")
+          .value;
+
+      const referredBy =
+        document
+          .getElementById("referralInput")
+          .value
+          .trim();
+
+
+      if (!email || !password) {
+
+        showMessage(
+          "Enter your email and password.",
+          false
+        );
+
+        return;
+
+      }
+
+
+      try {
+
+        const result =
+          await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+
+        const uid =
+          result.user.uid;
+
+
+        const referralCode =
+          "EH-" +
+          uid
+            .substring(0, 8)
+            .toUpperCase();
+
+
+        /*
+          Initial account data.
+
+          IMPORTANT:
+          Real balance changes will later
+          be handled through secure backend
+          logic, not trusted browser code.
+        */
+
+        await setDoc(
+          doc(db, "users", uid),
+          {
+
+            email,
+
+            role: "user",
+
+            availablePoints: 0,
+
+            lockedPoints: 0,
+
+            referralPoints: 0,
+
+            referralCode,
+
+            referredBy:
+              referredBy || null,
+
+            referralsCount: 0,
+
+            createdAt:
+              new Date().toISOString()
+
+          }
+        );
+
+
+        showMessage(
+          "Account created successfully.",
+          true
+        );
+
+
+      } catch (error) {
+
+        showMessage(
+          error.message
+            .replace("Firebase: ", ""),
+          false
+        );
+
+      }
+
+    });
+
+
+  /* =========================================
+     LOGIN
+  ========================================= */
+
+  document
+    .getElementById("loginSubmitBtn")
+    .addEventListener("click", async () => {
+
+      const email =
+        document
+          .getElementById("emailInput")
+          .value
+          .trim();
+
+      const password =
+        document
+          .getElementById("passwordInput")
+          .value;
+
+
+      if (!email || !password) {
+
+        showMessage(
+          "Enter your email and password.",
+          false
+        );
+
+        return;
+
+      }
+
+
+      try {
+
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+
+        showMessage(
+          "Login successful.",
+          true
+        );
+
+
+      } catch (error) {
+
+        showMessage(
+          error.message
+            .replace("Firebase: ", ""),
+          false
+        );
+
+      }
+
+    });
+
+
+  /* =========================================
+     MESSAGE
+  ========================================= */
+
+  function showMessage(
+    text,
+    success
+  ) {
+
+    authMessage.textContent =
+      text;
+
+    authMessage.style.color =
+      success
+        ? "#34d399"
+        : "#ff3b30";
+
+  }
+
+
+  /* =========================================
+     LOAD USER DATA
+  ========================================= */
+
+  async function loadUserData(user) {
+
+    const ref =
+      doc(
+        db,
+        "users",
+        user.uid
+      );
+
+
+    const snap =
+      await getDoc(ref);
+
+
+    if (!snap.exists()) {
+
+      return;
+
+    }
+
+
+    const data =
+      snap.data();
+
+
+    const available =
+      Number(
+        data.availablePoints || 0
+      );
+
+
+    const locked =
+      Number(
+        data.lockedPoints || 0
+      );
+
+
+    const referralPoints =
+      Number(
+        data.referralPoints || 0
+      );
+
+
+    const naira =
+      available /
+      POINTS_PER_NAIRA;
+
+
+    document
+      .getElementById("availablePoints")
+      .textContent =
+      available.toLocaleString();
+
+
+    document
+      .getElementById("lockedPoints")
+      .textContent =
+      locked.toLocaleString();
+
+
+    document
+      .getElementById("referralPoints")
+      .textContent =
+      referralPoints.toLocaleString();
+
+
+    document
+      .getElementById("nairaValue")
+      .textContent =
+      "₦" +
+      naira.toLocaleString();
+
+
+    document
+      .getElementById("userEmail")
+      .textContent =
+      user.email;
+
+
+    document
+      .getElementById("referralCode")
+      .textContent =
+      data.referralCode ||
+      "Unavailable";
+
+  }
+
+
+  /* =========================================
+     AUTH STATE
+  ========================================= */
+
+  onAuthStateChanged(
+    auth,
+    async user => {
+
+      if (!user) {
+
+        landingPage.style.display =
+          "block";
+
+        userDashboard.style.display =
+          "none";
+
+        adminPanel.style.display =
+          "none";
+
+        document
+          .getElementById("accountBtn")
+          .textContent =
+          "Log In";
+
+        return;
+
+      }
+
+
+      const userRef =
+        doc(
+          db,
+          "users",
+          user.uid
+        );
+
+
+      const snap =
+        await getDoc(userRef);
+
+
+      if (!snap.exists()) {
+
+        return;
+
+      }
+
+
+      const data =
+        snap.data();
+
+
+      landingPage.style.display =
+        "none";
+
+
+      document
+        .getElementById("accountBtn")
+        .textContent =
+        "Log Out";
+
+
+      /*
+        Admin access is determined by
+        Firestore role, not by an email
+        hard-coded into this HTML.
+      */
+
+      if (data.role === "admin") {
+
+        userDashboard.style.display =
+          "none";
+
+        adminPanel.style.display =
+          "block";
+
+        loadAdminStats();
+
+      } else {
+
+        adminPanel.style.display =
+          "none";
+
+        userDashboard.style.display =
+          "block";
+
+        loadUserData(user);
+
+      }
+
+    }
+  );
+
+
+  /* =========================================
+     ACCOUNT BUTTON
+  ========================================= */
+
+  document
+    .getElementById("accountBtn")
+    .addEventListener("click", async () => {
+
+      if (auth.currentUser) {
+
+        await signOut(auth);
+
+      } else {
+
+        openAuth();
+
+      }
+
+    });
+
+
+  /* =========================================
+     CAMPAIGN BUTTON
+  ========================================= */
+
+  document
+    .getElementById("createCampaignBtn")
+    .addEventListener("click", async () => {
+
+      if (!auth.currentUser) {
+
+        openAuth();
+
+        return;
+
+      }
+
+
+      const snap =
+        await getDoc(
+          doc(
+            db,
+            "users",
+            auth.currentUser.uid
+          )
+        );
+
+
+      if (!snap.exists()) {
+
+        return;
+
+      }
+
+
+      const data =
+        snap.data();
+
+
+      const available =
+        Number(
+          data.availablePoints || 0
+        );
+
+
+      if (
+        available <
+        MIN_CAMPAIGN_POINTS
+      ) {
+
+        alert(
+          "You need at least 6,000 available points (₦3,000) to create a campaign."
+        );
+
+        return;
+
+      }
+
+
+      alert(
+        "You qualify. The campaign creation screen will be added next."
+      );
+
+    });
+
+
+  /* =========================================
+     REFERRAL COPY
+  ========================================= */
+
+  document
+    .getElementById("copyReferralBtn")
+    .addEventListener("click", async () => {
+
+      const code =
+        document
+          .getElementById("referralCode")
+          .textContent;
+
+
+      if (
+        code &&
+        code !== "Unavailable" &&
+        code !== "Loading..."
+      ) {
+
+        await navigator.clipboard.writeText(code);
+
+        alert(
+          "Referral code copied."
+        );
+
+      }
+
+    });
+
+
+  /* =========================================
+     ADMIN STATS
+  ========================================= */
+
+  async function loadAdminStats() {
+
+    /*
+      These are placeholders for now.
+
+      We'll add secure admin-only queries
+      after Firestore security rules are
+      configured.
+    */
+
+    document
+      .getElementById("totalUsers")
+      .textContent =
+      "—";
+
+    document
+      .getElementById("totalCampaigns")
+      .textContent =
+      "—";
+
+    document
+      .getElementById("pendingWithdrawals")
+      .textContent =
+      "—";
+
+  }
+
+
+  /* =========================================
+     WITHDRAWAL CALCULATOR
+  ========================================= */
+
+  function calculateWithdrawal(
+    amountNaira
+  ) {
+
+    const fee =
+      amountNaira *
+      WITHDRAWAL_FEE_RATE;
+
+
+    const received =
+      amountNaira -
+      fee;
+
+
+    return {
+      fee,
+      received
+    };
+
+  }
+
+
+  /*
+    Example:
+
+    calculateWithdrawal(10000)
+
+    Fee = ₦150
+    User receives = ₦9,850
+  */
+
+
+  /* =========================================
+     FIREBASE GLOBALS
+  ========================================= */
+
+  window.engageHub = {
+
+    app,
+
+    auth,
+
+    db,
+
+    POINTS_PER_NAIRA,
+
+    REFERRAL_POINTS,
+
+    MIN_CAMPAIGN_POINTS,
+
+    WITHDRAWAL_FEE_RATE,
+
+    calculateWithdrawal
+
+  };
+
+</script>
+
+</body>
+</html>
