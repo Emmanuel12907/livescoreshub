@@ -1,1 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>LiveScoresHub - Live Football Scores</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #0b0f14;
+      color: #ffffff;
+    }
+
+    header {
+      background: #111820;
+      padding: 18px;
+      text-align: center;
+      border-bottom: 1px solid #26313d;
+    }
+
+    header h1 {
+      font-size: 26px;
+    }
+
+    header p {
+      color: #9aa7b4;
+      margin-top: 5px;
+      font-size: 13px;
+    }
+
+    .search {
+      padding: 15px;
+    }
+
+    .search input {
+      width: 100%;
+      padding: 13px;
+      border-radius: 8px;
+      border: 1px solid #303b47;
+      background: #151d26;
+      color: white;
+      outline: none;
+    }
+
+    .container {
+      padding: 0 15px 30px;
+    }
+
+    .section-title {
+      margin: 20px 0 10px;
+      font-size: 19px;
+    }
+
+    .matches {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .match {
+      background: #151d26;
+      border: 1px solid #26313d;
+      border-radius: 10px;
+      padding: 15px;
+    }
+
+    .league {
+      color: #8f9ba8;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .teams {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .team {
+      width: 40%;
+      font-weight: bold;
+    }
+
+    .score {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .live {
+      color: #ff3b30;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    .leagues {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .league-card {
+      background: #151d26;
+      border: 1px solid #26313d;
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .h2h {
+      background: #151d26;
+      border: 1px solid #26313d;
+      border-radius: 10px;
+      padding: 18px;
+      margin-top: 10px;
+    }
+
+    .h2h p {
+      color: #9aa7b4;
+      margin-top: 8px;
+      font-size: 14px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px 15px;
+      color: #687582;
+      font-size: 12px;
+    }
+
+    @media (min-width: 700px) {
+      .container,
+      .search {
+        max-width: 900px;
+        margin: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>⚽ LiveScoresHub</h1>
+    <p>Live football scores, fixtures & match information</p>
+  </header>
+
+  <div class="search">
+    <input type="text" placeholder="🔎 Search teams or competitions...">
+  </div>
+
+  <main class="container">
+
+    <h2 class="section-title">🔴 Live Matches</h2>
+
+    <div class="matches">
+
+      <div class="match">
+        <div class="league">Premier League</div>
+
+        <div class="teams">
+          <div class="team">Team A</div>
+          <div class="score">1 - 0</div>
+          <div class="team">Team B</div>
+        </div>
+
+        <div class="live">● LIVE 67'</div>
+      </div>
+
+      <div class="match">
+        <div class="league">La Liga</div>
+
+        <div class="teams">
+          <div class="team">Team C</div>
+          <div class="score">2 - 2</div>
+          <div class="team">Team D</div>
+        </div>
+
+        <div class="live">● LIVE 54'</div>
+      </div>
+
+    </div>
+
+    <h2 class="section-title">📅 Today's Matches</h2>
+
+    <div class="matches">
+
+      <div class="match">
+        <div class="league">Champions League</div>
+
+        <div class="teams">
+          <div class="team">Team E</div>
+          <div class="score">20:00</div>
+          <div class="team">Team F</div>
+        </div>
+      </div>
+
+      <div class="match">
+        <div class="league">Serie A</div>
+
+        <div class="teams">
+          <div class="team">Team G</div>
+          <div class="score">18:30</div>
+          <div class="team">Team H</div>
+        </div>
+      </div>
+
+    </div>
+
+    <h2 class="section-title">🏆 Popular Leagues</h2>
+
+    <div class="leagues">
+      <div class="league-card">🇬🇧 Premier League</div>
+      <div class="league-card">🇪🇸 La Liga</div>
+      <div class="league-card">🇮🇹 Serie A</div>
+      <div class="league-card">🇩🇪 Bundesliga</div>
+    </div>
+
+    <h2 class="section-title">📊 Head-to-Head</h2>
+
+    <div class="h2h">
+      <strong>Team A vs Team B</strong>
+      <p>H2H statistics and previous meetings will appear here.</p>
+      <p>Wins • Draws • Goals • Recent Form</p>
+    </div>
+
+  </main>
+
+  <footer>
+    © 2026 LiveScoresHub • Football scores & match information
+  </footer>
+
+</body>
+  </html>
