@@ -174,7 +174,17 @@
   <div class="search">
     <input type="text" placeholder="🔎 Search teams or competitions...">
   </div>
+<div style="text-align:center; margin:10px 15px;">
+  <button id="userAuthBtn" style="background:#151d26; border:1px solid #303b47; color:#ffb020; padding:8px 16px; border-radius:8px; font-size:13px;">Sign Up / Log In</button>
+</div>
 
+<div id="userAuthBox" style="display:none; padding:15px; background:#151d26; border:1px solid #26313d; border-radius:8px; margin:15px;">
+  <input type="email" id="userEmail" placeholder="Email" style="width:100%; padding:10px; margin-bottom:8px; background:#0b0f14; color:white; border:1px solid #303b47; border-radius:6px;">
+  <input type="password" id="userPassword" placeholder="Password" style="width:100%; padding:10px; margin-bottom:8px; background:#0b0f14; color:white; border:1px solid #303b47; border-radius:6px;">
+  <button id="userSignupBtn" style="width:48%; padding:10px; background:#ffb020; color:#14100A; border:none; border-radius:6px; margin-right:4%;">Sign Up</button>
+  <button id="userLoginBtn" style="width:48%; padding:10px; background:#303b47; color:white; border:none; border-radius:6px;">Log In</button>
+  <p id="userAuthMsg" style="font-size:12px; margin-top:8px;"></p>
+</div>
   <main class="container">
 <div id="publicAdBanner" style="display:none; margin:15px; padding:15px; background:#151d26; border:1px solid #ffb020; border-radius:8px; text-align:center;">
   <p id="publicAdText" style="color:white; font-weight:bold; margin-bottom:8px;"></p>
