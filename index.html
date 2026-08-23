@@ -868,7 +868,50 @@
 </div>
 
 </div>
+<!-- ================= CAMPAIGN MODAL ================= -->
 
+<div class="modal" id="campaignModal">
+
+  <div class="modal-box">
+
+    <button class="close" id="closeCampaign">×</button>
+
+    <h2>Create Campaign</h2>
+
+    <p style="color:#9aa7b4;font-size:13px;margin:8px 0 18px;">
+      Minimum budget: 6,000 points (₦3,000).
+    </p>
+
+    <input class="input" id="campaignTitle" type="text" placeholder="Campaign title">
+
+    <input class="input" id="campaignDescription" type="text" placeholder="Description">
+
+    <select class="input" id="campaignTaskType">
+      <option value="">Select task type</option>
+      <option value="like">Like</option>
+      <option value="follow">Follow</option>
+      <option value="comment">Comment</option>
+      <option value="share">Share</option>
+      <option value="subscribe">Subscribe</option>
+    </select>
+
+    <input class="input" id="campaignUrl" type="url" placeholder="Target link (e.g. post/page URL)">
+
+    <input class="input" id="campaignBudget" type="number" placeholder="Total points budget (min 6000)">
+
+    <input class="input" id="campaignParticipants" type="number" placeholder="Number of participants needed">
+
+    <input class="input" id="campaignDeadline" type="date">
+
+    <button class="form-btn signup" id="submitCampaignBtn">
+      Launch Campaign
+    </button>
+
+    <p class="message" id="campaignMessage"></p>
+
+  </div>
+
+  </div>
 
 <script type="module">
 
@@ -894,7 +937,8 @@
     getFirestore,
     doc,
     setDoc,
-    getDoc
+    getDoc, 
+    collection 
   } from
   "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
@@ -1128,33 +1172,134 @@
 
 
   /* =========================================
-     CAMPAIGN BUTTON
-  ========================================= */
+   CAMPAIGN CREATION
+========================================= */
 
-  document.getElementById("createCampaignBtn").addEventListener("click", async () => {
+const campaignModal = document.getElementById("campaignModal");
+const campaignMessage = document.getElementById("campaignMessage");
 
-    if (!auth.currentUser) {
-      openAuth();
-      return;
-    }
+function openCampaignModal() {
+  campaignModal.classList.add("show");
+}
 
-    const snap = await getDoc(doc(db, "users", auth.currentUser.uid));
-    if (!snap.exists()) return;
+function closeCampaignModal() {
+  campaignModal.classList.remove("show");
+}
 
-    const data = snap.data();
-    const available = Number(data.availablePoints || 0);
+document.getElementById("closeCampaign").addEventListener("click", closeCampaignModal);
 
-    if (available < MIN_CAMPAIGN_POINTS) {
-      alert("You need at least 6,000 available points (₦3,000) to create a campaign.");
-      return;
-    }
+// Replace your old createCampaignBtn listener with this:
+document.getElementById("createCampaignBtn").addEventListener("click", async () => {
 
-    alert("You qualify. The campaign creation screen will be added next.");
+  if (!auth.currentUser) {
+    openAuth();
+    return;
+  }
 
-  });
+  const snap = await getDoc(doc(db, "users", auth.currentUser.uid));
+  if (!snap.exists()) return;
 
+  const data = snap.data();
+  const available = Number(data.availablePoints || 0);
 
-  /* =========================================
+  if (available < MIN_CAMPAIGN_POINTS) {
+    alert("You need at least 6,000 available points (₦3,000) to create a campaign.");
+    return;
+  }
+
+  openCampaignModal();
+
+});
+
+document.getElementById("submitCampaignBtn").addEventListener("click", async () => {
+
+  const title = document.getElementById("campaignTitle").value.trim();
+  const description = document.getElementById("campaignDescription").value.trim();
+  const taskType = document.getElementById("campaignTaskType").value;
+  const url = document.getElementById("campaignUrl").value.trim();
+  const budget = Number(document.getElementById("campaignBudget").value);
+  const participants = Number(document.getElementById("campaignParticipants").value);
+  const deadline = document.getElementById("campaignDeadline").value;
+
+  if (!title || !description || !taskType || !url || !budget || !participants || !deadline) {
+    showMessage(campaignMessage, "Please fill in all fields.", false);
+    return;
+  }
+
+  if (budget < MIN_CAMPAIGN_POINTS) {
+    showMessage(campaignMessage, "Budget must be at least 6,000 points.", false);
+    return;
+  }
+
+  if (participants < 1) {
+    showMessage(campaignMessage, "Participants must be at least 1.", false);
+    return;
+  }
+
+  const deadlineDate = new Date(deadline);
+  if (deadlineDate <= new Date()) {
+    showMessage(campaignMessage, "Deadline must be in the future.", false);
+    return;
+  }
+
+  const userRef = doc(db, "users", auth.currentUser.uid);
+  const userSnap = await getDoc(userRef);
+  const userData = userSnap.data();
+  const available = Number(userData.availablePoints || 0);
+
+  if (available < budget) {
+    showMessage(campaignMessage, "Insufficient available points for this budget.", false);
+    return;
+  }
+
+  try {
+
+    const pointsPerParticipant = Math.floor(budget / participants);
+
+    const campaignRef = doc(collection(db, "campaigns"));
+
+    await setDoc(campaignRef, {
+      title,
+      description,
+      taskType,
+      url,
+      budget,
+      participantsNeeded: participants,
+      participantsJoined: 0,
+      pointsPerParticipant,
+      deadline: deadlineDate.toISOString(),
+      status: "active",
+      createdBy: auth.currentUser.uid,
+      createdAt: new Date().toISOString()
+    });
+
+    // Move budget from available to locked (funds are committed to this campaign)
+    await setDoc(userRef, {
+      availablePoints: available - budget,
+      lockedPoints: Number(userData.lockedPoints || 0) + budget
+    }, { merge: true });
+
+    showMessage(campaignMessage, "Campaign launched successfully!", true);
+
+    setTimeout(() => {
+      closeCampaignModal();
+      loadUserData(auth.currentUser);
+      document.getElementById("campaignTitle").value = "";
+      document.getElementById("campaignDescription").value = "";
+      document.getElementById("campaignTaskType").value = "";
+      document.getElementById("campaignUrl").value = "";
+      document.getElementById("campaignBudget").value = "";
+      document.getElementById("campaignParticipants").value = "";
+      document.getElementById("campaignDeadline").value = "";
+      campaignMessage.textContent = "";
+    }, 1200);
+
+  } catch (error) {
+    showMessage(campaignMessage, error.message.replace("Firebase: ", ""), false);
+  }
+
+});
+       /* =========================================
      REFERRAL COPY
   ========================================= */
 
