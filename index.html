@@ -912,7 +912,11 @@
   </div>
 
   </div>
-
+<script>
+  window.addEventListener('error', function(e) {
+    alert('JS ERROR: ' + e.message + ' (line ' + e.lineno + ')');
+  });
+</script>
 <script type="module">
 
  /* =========================================
