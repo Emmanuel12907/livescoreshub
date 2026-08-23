@@ -872,7 +872,7 @@
 
 <script type="module">
 
-  /* =========================================
+ /* =========================================
      FIREBASE
   ========================================= */
 
@@ -900,36 +900,17 @@
 
 
   const firebaseConfig = {
-
-    apiKey:
-      "AIzaSyCImtvrbgEpEYFyzZVaZehE31qtfcm-py4",
-
-    authDomain:
-      "engagehubs-c68a1.firebaseapp.com",
-
-    projectId:
-      "engagehubs-c68a1",
-
-    storageBucket:
-      "engagehubs-c68a1.firebasestorage.app",
-
-    messagingSenderId:
-      "221819821919",
-
-    appId:
-      "1:221819821919:web:a6097205c3173605c4e0ea"
-
+    apiKey: "AIzaSyCImtvrbgEpEYFyzZVaZehE31qtfcm-py4",
+    authDomain: "engagehubs-c68a1.firebaseapp.com",
+    projectId: "engagehubs-c68a1",
+    storageBucket: "engagehubs-c68a1.firebasestorage.app",
+    messagingSenderId: "221819821919",
+    appId: "1:221819821919:web:a6097205c3173605c4e0ea"
   };
 
-
-  const app =
-    initializeApp(firebaseConfig);
-
-  const auth =
-    getAuth(app);
-
-  const db =
-    getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
 
   /* =========================================
@@ -937,11 +918,8 @@
   ========================================= */
 
   const POINTS_PER_NAIRA = 2;
-
   const REFERRAL_POINTS = 500;
-
   const MIN_CAMPAIGN_POINTS = 6000;
-
   const WITHDRAWAL_FEE_RATE = 0.015;
 
 
@@ -949,20 +927,15 @@
      ELEMENTS
   ========================================= */
 
-  const landingPage =
-    document.getElementById("landingPage");
+  const landingPage = document.getElementById("landingPage");
+  const userDashboard = document.getElementById("userDashboard");
+  const adminPanel = document.getElementById("adminPanel");
+  const authModal = document.getElementById("authModal");
 
-  const userDashboard =
-    document.getElementById("userDashboard");
-
-  const adminPanel =
-    document.getElementById("adminPanel");
-
-  const authModal =
-    document.getElementById("authModal");
-
-  const authMessage =
-    document.getElementById("authMessage");
+  const loginForm = document.getElementById("loginForm");
+  const signupForm = document.getElementById("signupForm");
+  const loginMessage = document.getElementById("loginMessage");
+  const signupMessage = document.getElementById("signupMessage");
 
 
   /* =========================================
@@ -970,226 +943,109 @@
   ========================================= */
 
   function openAuth() {
-
     authModal.classList.add("show");
-
   }
-
 
   function closeAuth() {
-
     authModal.classList.remove("show");
-
   }
 
-
-  document
-    .getElementById("getStartedBtn")
-    .addEventListener("click", openAuth);
-
-
-  document
-    .getElementById("loginBtn")
-    .addEventListener("click", openAuth);
+  document.getElementById("getStartedBtn").addEventListener("click", openAuth);
+  document.getElementById("loginBtn").addEventListener("click", openAuth);
+  document.getElementById("closeAuth").addEventListener("click", closeAuth);
 
 
-  document
-    .getElementById("closeAuth")
-    .addEventListener("click", closeAuth);
+  /* =========================================
+     LOGIN / SIGNUP TOGGLE
+  ========================================= */
+
+  document.getElementById("showSignupBtn").addEventListener("click", () => {
+    loginForm.classList.add("hidden");
+    signupForm.classList.remove("hidden");
+  });
+
+  document.getElementById("showLoginBtn").addEventListener("click", () => {
+    signupForm.classList.add("hidden");
+    loginForm.classList.remove("hidden");
+  });
 
 
   /* =========================================
      CREATE ACCOUNT
   ========================================= */
 
-  document
-    .getElementById("signupBtn")
-    .addEventListener("click", async () => {
+  document.getElementById("signupBtn").addEventListener("click", async () => {
 
-      const email =
-        document
-          .getElementById("emailInput")
-          .value
-          .trim();
+    const username = document.getElementById("signupUsername").value.trim();
+    const email = document.getElementById("signupEmail").value.trim();
+    const password = document.getElementById("signupPassword").value;
+    const referredBy = document.getElementById("signupReferral").value.trim();
 
-      const password =
-        document
-          .getElementById("passwordInput")
-          .value;
+    if (!username || !email || !password) {
+      showMessage(signupMessage, "Fill in all required fields.", false);
+      return;
+    }
 
-      const referredBy =
-        document
-          .getElementById("referralInput")
-          .value
-          .trim();
+    try {
 
+      const result = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = result.user.uid;
 
-      if (!email || !password) {
+      const referralCode = "EH-" + uid.substring(0, 8).toUpperCase();
 
-        showMessage(
-          "Enter your email and password.",
-          false
-        );
+      await setDoc(doc(db, "users", uid), {
+        username,
+        email,
+        role: "user",
+        availablePoints: 0,
+        lockedPoints: 0,
+        referralPoints: 0,
+        referralCode,
+        referredBy: referredBy || null,
+        referralsCount: 0,
+        createdAt: new Date().toISOString()
+      });
 
-        return;
+      showMessage(signupMessage, "Account created successfully.", true);
 
-      }
+    } catch (error) {
+      showMessage(signupMessage, error.message.replace("Firebase: ", ""), false);
+    }
 
-
-      try {
-
-        const result =
-          await createUserWithEmailAndPassword(
-            auth,
-            email,
-            password
-          );
-
-
-        const uid =
-          result.user.uid;
-
-
-        const referralCode =
-          "EH-" +
-          uid
-            .substring(0, 8)
-            .toUpperCase();
-
-
-        /*
-          Initial account data.
-
-          IMPORTANT:
-          Real balance changes will later
-          be handled through secure backend
-          logic, not trusted browser code.
-        */
-
-        await setDoc(
-          doc(db, "users", uid),
-          {
-
-            email,
-
-            role: "user",
-
-            availablePoints: 0,
-
-            lockedPoints: 0,
-
-            referralPoints: 0,
-
-            referralCode,
-
-            referredBy:
-              referredBy || null,
-
-            referralsCount: 0,
-
-            createdAt:
-              new Date().toISOString()
-
-          }
-        );
-
-
-        showMessage(
-          "Account created successfully.",
-          true
-        );
-
-
-      } catch (error) {
-
-        showMessage(
-          error.message
-            .replace("Firebase: ", ""),
-          false
-        );
-
-      }
-
-    });
+  });
 
 
   /* =========================================
      LOGIN
   ========================================= */
 
-  document
-    .getElementById("loginSubmitBtn")
-    .addEventListener("click", async () => {
+  document.getElementById("loginSubmitBtn").addEventListener("click", async () => {
 
-      const email =
-        document
-          .getElementById("emailInput")
-          .value
-          .trim();
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value;
 
-      const password =
-        document
-          .getElementById("passwordInput")
-          .value;
+    if (!email || !password) {
+      showMessage(loginMessage, "Enter your email and password.", false);
+      return;
+    }
 
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      showMessage(loginMessage, "Login successful.", true);
+    } catch (error) {
+      showMessage(loginMessage, error.message.replace("Firebase: ", ""), false);
+    }
 
-      if (!email || !password) {
-
-        showMessage(
-          "Enter your email and password.",
-          false
-        );
-
-        return;
-
-      }
-
-
-      try {
-
-        await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-
-
-        showMessage(
-          "Login successful.",
-          true
-        );
-
-
-      } catch (error) {
-
-        showMessage(
-          error.message
-            .replace("Firebase: ", ""),
-          false
-        );
-
-      }
-
-    });
+  });
 
 
   /* =========================================
      MESSAGE
   ========================================= */
 
-  function showMessage(
-    text,
-    success
-  ) {
-
-    authMessage.textContent =
-      text;
-
-    authMessage.style.color =
-      success
-        ? "#34d399"
-        : "#ff3b30";
-
+  function showMessage(target, text, success) {
+    target.textContent = text;
+    target.style.color = success ? "#34d399" : "#ff3b30";
   }
 
 
@@ -1199,88 +1055,24 @@
 
   async function loadUserData(user) {
 
-    const ref =
-      doc(
-        db,
-        "users",
-        user.uid
-      );
+    const ref = doc(db, "users", user.uid);
+    const snap = await getDoc(ref);
 
+    if (!snap.exists()) return;
 
-    const snap =
-      await getDoc(ref);
+    const data = snap.data();
 
+    const available = Number(data.availablePoints || 0);
+    const locked = Number(data.lockedPoints || 0);
+    const referralPoints = Number(data.referralPoints || 0);
+    const naira = available / POINTS_PER_NAIRA;
 
-    if (!snap.exists()) {
-
-      return;
-
-    }
-
-
-    const data =
-      snap.data();
-
-
-    const available =
-      Number(
-        data.availablePoints || 0
-      );
-
-
-    const locked =
-      Number(
-        data.lockedPoints || 0
-      );
-
-
-    const referralPoints =
-      Number(
-        data.referralPoints || 0
-      );
-
-
-    const naira =
-      available /
-      POINTS_PER_NAIRA;
-
-
-    document
-      .getElementById("availablePoints")
-      .textContent =
-      available.toLocaleString();
-
-
-    document
-      .getElementById("lockedPoints")
-      .textContent =
-      locked.toLocaleString();
-
-
-    document
-      .getElementById("referralPoints")
-      .textContent =
-      referralPoints.toLocaleString();
-
-
-    document
-      .getElementById("nairaValue")
-      .textContent =
-      "₦" +
-      naira.toLocaleString();
-
-
-    document
-      .getElementById("userEmail")
-      .textContent =
-      user.email;
-
-
-    document
-      .getElementById("referralCode")
-      .textContent =
-      data.referralCode ||
-      "Unavailable";
+    document.getElementById("availablePoints").textContent = available.toLocaleString();
+    document.getElementById("lockedPoints").textContent = locked.toLocaleString();
+    document.getElementById("referralPoints").textContent = referralPoints.toLocaleString();
+    document.getElementById("nairaValue").textContent = "₦" + naira.toLocaleString();
+    document.getElementById("userEmail").textContent = user.email;
+    document.getElementById("referralCode").textContent = data.referralCode || "Unavailable";
 
   }
 
@@ -1289,211 +1081,93 @@
      AUTH STATE
   ========================================= */
 
-  onAuthStateChanged(
-    auth,
-    async user => {
+  onAuthStateChanged(auth, async user => {
 
-      if (!user) {
-
-        landingPage.style.display =
-          "block";
-
-        userDashboard.style.display =
-          "none";
-
-        adminPanel.style.display =
-          "none";
-
-        document
-          .getElementById("accountBtn")
-          .textContent =
-          "Log In";
-
-        return;
-
-      }
-
-
-      const userRef =
-        doc(
-          db,
-          "users",
-          user.uid
-        );
-
-
-      const snap =
-        await getDoc(userRef);
-
-
-      if (!snap.exists()) {
-
-        return;
-
-      }
-
-
-      const data =
-        snap.data();
-
-
-      landingPage.style.display =
-        "none";
-
-
-      document
-        .getElementById("accountBtn")
-        .textContent =
-        "Log Out";
-
-
-      /*
-        Admin access is determined by
-        Firestore role, not by an email
-        hard-coded into this HTML.
-      */
-
-      if (data.role === "admin") {
-
-        userDashboard.style.display =
-          "none";
-
-        adminPanel.style.display =
-          "block";
-
-        loadAdminStats();
-
-      } else {
-
-        adminPanel.style.display =
-          "none";
-
-        userDashboard.style.display =
-          "block";
-
-        loadUserData(user);
-
-      }
-
+    if (!user) {
+      landingPage.style.display = "block";
+      userDashboard.style.display = "none";
+      adminPanel.style.display = "none";
+      document.getElementById("accountBtn").textContent = "Log In";
+      return;
     }
-  );
+
+    const userRef = doc(db, "users", user.uid);
+    const snap = await getDoc(userRef);
+
+    if (!snap.exists()) return;
+
+    const data = snap.data();
+
+    landingPage.style.display = "none";
+    document.getElementById("accountBtn").textContent = "Log Out";
+
+    if (data.role === "admin") {
+      userDashboard.style.display = "none";
+      adminPanel.style.display = "block";
+      loadAdminStats();
+    } else {
+      adminPanel.style.display = "none";
+      userDashboard.style.display = "block";
+      loadUserData(user);
+    }
+
+  });
 
 
   /* =========================================
      ACCOUNT BUTTON
   ========================================= */
 
-  document
-    .getElementById("accountBtn")
-    .addEventListener("click", async () => {
-
-      if (auth.currentUser) {
-
-        await signOut(auth);
-
-      } else {
-
-        openAuth();
-
-      }
-
-    });
+  document.getElementById("accountBtn").addEventListener("click", async () => {
+    if (auth.currentUser) {
+      await signOut(auth);
+    } else {
+      openAuth();
+    }
+  });
 
 
   /* =========================================
      CAMPAIGN BUTTON
   ========================================= */
 
-  document
-    .getElementById("createCampaignBtn")
-    .addEventListener("click", async () => {
+  document.getElementById("createCampaignBtn").addEventListener("click", async () => {
 
-      if (!auth.currentUser) {
+    if (!auth.currentUser) {
+      openAuth();
+      return;
+    }
 
-        openAuth();
+    const snap = await getDoc(doc(db, "users", auth.currentUser.uid));
+    if (!snap.exists()) return;
 
-        return;
+    const data = snap.data();
+    const available = Number(data.availablePoints || 0);
 
-      }
+    if (available < MIN_CAMPAIGN_POINTS) {
+      alert("You need at least 6,000 available points (₦3,000) to create a campaign.");
+      return;
+    }
 
+    alert("You qualify. The campaign creation screen will be added next.");
 
-      const snap =
-        await getDoc(
-          doc(
-            db,
-            "users",
-            auth.currentUser.uid
-          )
-        );
-
-
-      if (!snap.exists()) {
-
-        return;
-
-      }
-
-
-      const data =
-        snap.data();
-
-
-      const available =
-        Number(
-          data.availablePoints || 0
-        );
-
-
-      if (
-        available <
-        MIN_CAMPAIGN_POINTS
-      ) {
-
-        alert(
-          "You need at least 6,000 available points (₦3,000) to create a campaign."
-        );
-
-        return;
-
-      }
-
-
-      alert(
-        "You qualify. The campaign creation screen will be added next."
-      );
-
-    });
+  });
 
 
   /* =========================================
      REFERRAL COPY
   ========================================= */
 
-  document
-    .getElementById("copyReferralBtn")
-    .addEventListener("click", async () => {
+  document.getElementById("copyReferralBtn").addEventListener("click", async () => {
 
-      const code =
-        document
-          .getElementById("referralCode")
-          .textContent;
+    const code = document.getElementById("referralCode").textContent;
 
+    if (code && code !== "Unavailable" && code !== "Loading...") {
+      await navigator.clipboard.writeText(code);
+      alert("Referral code copied.");
+    }
 
-      if (
-        code &&
-        code !== "Unavailable" &&
-        code !== "Loading..."
-      ) {
-
-        await navigator.clipboard.writeText(code);
-
-        alert(
-          "Referral code copied."
-        );
-
-      }
-
-    });
+  });
 
 
   /* =========================================
@@ -1501,30 +1175,9 @@
   ========================================= */
 
   async function loadAdminStats() {
-
-    /*
-      These are placeholders for now.
-
-      We'll add secure admin-only queries
-      after Firestore security rules are
-      configured.
-    */
-
-    document
-      .getElementById("totalUsers")
-      .textContent =
-      "—";
-
-    document
-      .getElementById("totalCampaigns")
-      .textContent =
-      "—";
-
-    document
-      .getElementById("pendingWithdrawals")
-      .textContent =
-      "—";
-
+    document.getElementById("totalUsers").textContent = "—";
+    document.getElementById("totalCampaigns").textContent = "—";
+    document.getElementById("pendingWithdrawals").textContent = "—";
   }
 
 
@@ -1532,36 +1185,11 @@
      WITHDRAWAL CALCULATOR
   ========================================= */
 
-  function calculateWithdrawal(
-    amountNaira
-  ) {
-
-    const fee =
-      amountNaira *
-      WITHDRAWAL_FEE_RATE;
-
-
-    const received =
-      amountNaira -
-      fee;
-
-
-    return {
-      fee,
-      received
-    };
-
+  function calculateWithdrawal(amountNaira) {
+    const fee = amountNaira * WITHDRAWAL_FEE_RATE;
+    const received = amountNaira - fee;
+    return { fee, received };
   }
-
-
-  /*
-    Example:
-
-    calculateWithdrawal(10000)
-
-    Fee = ₦150
-    User receives = ₦9,850
-  */
 
 
   /* =========================================
@@ -1569,23 +1197,14 @@
   ========================================= */
 
   window.engageHub = {
-
     app,
-
     auth,
-
     db,
-
     POINTS_PER_NAIRA,
-
     REFERRAL_POINTS,
-
     MIN_CAMPAIGN_POINTS,
-
     WITHDRAWAL_FEE_RATE,
-
     calculateWithdrawal
-
   };
 
 </script>
