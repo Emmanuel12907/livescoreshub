@@ -1124,7 +1124,9 @@
      AUTH STATE
   ========================================= */
 
-  onAuthStateChanged(auth, async user => {
+onAuthStateChanged(auth, async user => {
+
+  try {
 
     if (!user) {
       landingPage.style.display = "block";
@@ -1135,31 +1137,30 @@
     }
 
     const userRef = doc(db, "users", user.uid);
-let snap = await getDoc(userRef);
+    let snap = await getDoc(userRef);
 
-if (!snap.exists()) {
+    if (!snap.exists()) {
 
-  const referralCode = "EH-" + user.uid.substring(0, 8).toUpperCase();
+      const referralCode = "EH-" + user.uid.substring(0, 8).toUpperCase();
 
-  await setDoc(userRef, {
-    username: user.email.split("@")[0],
-    email: user.email,
-    role: "user",
-    availablePoints: 0,
-    lockedPoints: 0,
-    referralPoints: 0,
-    referralCode,
-    referredBy: null,
-    referralsCount: 0,
-    createdAt: new Date().toISOString()
-  });
+      await setDoc(userRef, {
+        username: user.email.split("@")[0],
+        email: user.email,
+        role: "user",
+        availablePoints: 0,
+        lockedPoints: 0,
+        referralPoints: 0,
+        referralCode,
+        referredBy: null,
+        referralsCount: 0,
+        createdAt: new Date().toISOString()
+      });
 
-  snap = await getDoc(userRef);
+      snap = await getDoc(userRef);
 
-}
+    }
 
-const data = snap.data();
-
+    const data = snap.data();
 
     landingPage.style.display = "none";
     document.getElementById("accountBtn").textContent = "Log Out";
@@ -1174,7 +1175,13 @@ const data = snap.data();
       loadUserData(user);
     }
 
-  });
+  } catch (error) {
+
+    alert("AUTH STATE ERROR: " + error.message);
+
+  }
+
+});
 
 
   /* =========================================
