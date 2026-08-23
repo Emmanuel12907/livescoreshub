@@ -1050,8 +1050,7 @@
         createdAt: new Date().toISOString()
       });
 
-      showMessage(signupMessage, "Account created successfully.", true);
-
+      showMessage(signupMessage, "Account created successfully.", true);setTimeout(closeAuth, 800);
     } catch (error) {
       showMessage(signupMessage, error.message.replace("Firebase: ", ""), false);
     }
@@ -1075,7 +1074,7 @@
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      showMessage(loginMessage, "Login successful.", true);
+      showMessage(loginMessage, "Login successful.", true);setTimeout(closeAuth, 800);
     } catch (error) {
       showMessage(loginMessage, error.message.replace("Firebase: ", ""), false);
     }
