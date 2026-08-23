@@ -749,64 +749,123 @@
   © 2026 EngageHub
 </footer>
 
-
+  
 <!-- ================= AUTH MODAL ================= -->
 
 <div class="modal" id="authModal">
 
   <div class="modal-box">
 
-    <button class="close" id="closeAuth">
-      ×
-    </button>
+    <button class="close" id="closeAuth">×</button>
 
-    <h2>
-      EngageHub Account
-    </h2>
+    <!-- LOGIN -->
 
-    <br>
+    <div id="loginForm">
 
-    <input
-      class="input"
-      id="emailInput"
-      type="email"
-      placeholder="Email address"
-    >
+      <h2>Log In</h2>
 
-    <input
-      class="input"
-      id="passwordInput"
-      type="password"
-      placeholder="Password"
-    >
+      <p style="color:#9aa7b4;font-size:13px;margin:8px 0 18px;">
+        Welcome back to EngageHub.
+      </p>
 
-    <input
-      class="input"
-      id="referralInput"
-      type="text"
-      placeholder="Referral code (optional)"
-    >
+      <input
+        class="input"
+        id="loginEmail"
+        type="email"
+        placeholder="Email address"
+      >
 
-    <button
-      class="form-btn signup"
-      id="signupBtn"
-    >
-      Create Account
-    </button>
+      <input
+        class="input"
+        id="loginPassword"
+        type="password"
+        placeholder="Password"
+      >
 
-    <button
-      class="form-btn login"
-      id="loginSubmitBtn"
-    >
-      Log In
-    </button>
+      <button
+        class="form-btn login"
+        id="loginSubmitBtn"
+      >
+        Log In
+      </button>
 
-    <p
-      class="message"
-      id="authMessage"
-    ></p>
+      <p class="message" id="loginMessage"></p>
+
+      <p style="text-align:center;color:#9aa7b4;font-size:13px;margin-top:15px;">
+        Don't have an account?
+        <button
+          id="showSignupBtn"
+          style="background:none;border:none;color:#ffb020;font-weight:bold;"
+        >
+          Sign Up
+        </button>
+      </p>
+
+    </div>
+
+
+    <!-- SIGN UP -->
+
+    <div id="signupForm" class="hidden">
+
+      <h2>Create Account</h2>
+
+      <p style="color:#9aa7b4;font-size:13px;margin:8px 0 18px;">
+        Create your EngageHub account.
+      </p>
+
+      <input
+        class="input"
+        id="signupUsername"
+        type="text"
+        placeholder="Username"
+      >
+
+      <input
+        class="input"
+        id="signupEmail"
+        type="email"
+        placeholder="Email address"
+      >
+
+      <input
+        class="input"
+        id="signupPassword"
+        type="password"
+        placeholder="Password"
+      >
+
+      <input
+        class="input"
+        id="signupReferral"
+        type="text"
+        placeholder="Referral code (optional)"
+      >
+
+      <button
+        class="form-btn signup"
+        id="signupBtn"
+      >
+        Create Account
+      </button>
+
+      <p class="message" id="signupMessage"></p>
+
+      <p style="text-align:center;color:#9aa7b4;font-size:13px;margin-top:15px;">
+        Already have an account?
+        <button
+          id="showLoginBtn"
+          style="background:none;border:none;color:#ffb020;font-weight:bold;"
+        >
+          Log In
+        </button>
+      </p>
+
+    </div>
 
   </div>
+
+</div>
 
 </div>
 
